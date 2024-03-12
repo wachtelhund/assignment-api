@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 
 export class HivesController {
     public getHives(req: Request, res: Response, next: NextFunction) {
+        console.log(req.headers);
+        
         res.send('All Hives');
     }
 
