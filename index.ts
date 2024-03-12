@@ -10,13 +10,9 @@ dotenv.config();
 const app = express();
 app.use(helmet());
 app.use(logger('dev'));
-
 swaggerDocs(app);
-app.use('/api/v1', v1Router);
 
-app.get('/api', (req, res) => {
-  res.send('Hello World');
-});
+app.use('/api/v1', v1Router);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Server is running on port ${process.env.PORT || 3000}`);
