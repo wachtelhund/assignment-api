@@ -2,6 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import logger from 'morgan';
 import dotenv from 'dotenv';
+import { router as v1Router } from './src/api/v1/view/routes/router';
 
 dotenv.config();
 
@@ -9,7 +10,9 @@ const app = express();
 app.use(helmet());
 app.use(logger('dev'));
 
-app.get('/', (req, res) => {
+app.use('/api/v1', v1Router);
+
+app.get('/api', (req, res) => {
   res.send('Hello World');
 });
 
