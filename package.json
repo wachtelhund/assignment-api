@@ -3,9 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "bun run ./src/index.ts",
+    "start": "bun run ./index.ts",
     "docker:push": "sudo docker push wachtelhund/assignment-api",
-    "dev": "bun run ./src/index.ts --watch"
+    "dev": "bun run ./index.ts --watch"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
