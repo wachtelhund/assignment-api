@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "bun run ./index.ts",
-    "docker:push": "sudo docker push wachtelhund/assignment-api",
+    "docker:publish": "sudo docker build -t docker.io/wachtelhund/assignment-api . && sudo docker push docker.io/wachtelhund/assignment-api",
     "dev": "bun run ./index.ts --watch"
   },
   "devDependencies": {
