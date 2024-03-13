@@ -2,8 +2,8 @@ import express from 'express';
 import helmet from 'helmet';
 import logger from 'morgan';
 import dotenv from 'dotenv';
-import { router as v1Router } from './src/api/v1/view/routes/router';
 import { swaggerDocs } from './src/utils/swagger';
+import { router as v1Router } from './src/api/v1/view/routes/router';
 
 dotenv.config();
 

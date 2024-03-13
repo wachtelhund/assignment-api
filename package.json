@@ -5,6 +5,7 @@
   "scripts": {
     "start": "bun run ./index.ts",
     "docker:publish": "sudo docker build -t docker.io/wachtelhund/assignment-api . && sudo docker push docker.io/wachtelhund/assignment-api",
+    "docker:run": "docker-compose pull && docker-compose up -d",
     "dev": "bun run ./index.ts --watch"
   },
   "devDependencies": {

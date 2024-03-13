@@ -1,3 +1,6 @@
+# Docker compose
+docker-compose pull && docker-compose up -d
+
 # API design assignment
 
 In this assignment, you will implement a web API following the theory of REST. We encourage you to have your ideas about the API service to build. Maybe you have some idea you want to start with through an API-driven design? For those of you without any ideas, we present a scenario below. That will also give a hint of the extent of this assignment.
