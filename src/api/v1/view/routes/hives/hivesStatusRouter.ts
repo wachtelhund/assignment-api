@@ -1,7 +1,7 @@
 import express from 'express';
 import { HiveStatusController } from '../../../controller/hives/HiveStatusController'
 
-export const router = express.Router();
+export const router = express.Router({ mergeParams: true });
 
 const controller = new HiveStatusController();
 
@@ -78,7 +78,7 @@ router.get('/temperature', (req, res, next) => controller.getHiveTemperature(req
 
 /**
  * @swagger
- * /api/v1/hives/status/arrival-departure-flow:
+ * /api/v1/hives/status/hive-flow:
  *   get:
  *     tags:
  *      - HiveStatus
@@ -87,4 +87,4 @@ router.get('/temperature', (req, res, next) => controller.getHiveTemperature(req
  *       200:
  *         description: The arrival and departure flow of a hive.
  */
-router.get('/arrival-departure-flow', (req, res, next) => controller.getHiveArrivalDepartureFlow(req, res, next));
+router.get('/hive-flow', (req, res, next) => controller.getHiveArrivalDepartureFlow(req, res, next));
