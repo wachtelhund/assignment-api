@@ -9,10 +9,10 @@ const schema = new mongoose.Schema<Hive>(
             latitude: { type: Number, required: true },
             longitude: { type: Number, required: true }
         },
-        current_status: { type: ObjectId, ref: 'HiveStatus', required: true },
+        current_status: { type: ObjectId, ref: 'HiveStatus' },
         history: [{ type: ObjectId, ref: 'HiveStatus' }],
-        createdAt: { type: Date, required: true },
-        updatedAt: { type: Date, required: true }
+        createdAt: { type: Date },
+        updatedAt: { type: Date }
     },
     {
         timestamps: true,
@@ -31,6 +31,6 @@ schema.pre('save', function () {
     this.id = this._id.toHexString();
 });
 
-const hive = mongoose.model<Hive>('Hive', schema);
+const HiveModel = mongoose.model<Hive>('Hive', schema);
 
-export default hive;
+export default HiveModel;

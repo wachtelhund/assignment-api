@@ -6,6 +6,7 @@ import { swaggerDocs } from './src/utils/swagger';
 import { router as v1Router } from './src/api/v1/view/routes/router';
 import mongoose, { Mongoose } from 'mongoose';
 import { errorHandler } from './src/utils/errorHandler';
+import bodyParser from 'body-parser';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ if (process.env.MONGO_URI !== undefined) {
       const app = express();
       app.use(helmet());
       app.use(logger('dev'));
+      app.use(bodyParser.json());
       swaggerDocs(app);
 
       app.use('/api/v1', v1Router);
