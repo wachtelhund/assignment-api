@@ -42,7 +42,6 @@ export class HiveStatusController {
     public async createHiveStatus(req: Request, res: Response, next: NextFunction) {
         try {
             const hiveId = req.params.id;
-            console.log(req.params);
             if (!req.body.temperature || !req.body.humidity || !req.body.weight || !req.body.hive_flow) {
                 next(new RequestError('Missing parameters', 400));
             }
@@ -135,8 +134,6 @@ export class HiveStatusController {
         const to = req.query.to as string;
         
         let fromDate, toDate;
-
-        console.log(from, to);
 
         if (from) {
             fromDate = new Date(from);

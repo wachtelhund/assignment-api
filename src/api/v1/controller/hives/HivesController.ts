@@ -3,6 +3,7 @@ import HiveModel from "../../model/mongoose/schemas/hive.model";
 import { RequestError } from "../../../../utils/requestError";
 import { Hive } from "../../model/types/Hive";
 import HiveStatusModel from "../../model/mongoose/schemas/hiveStatus.model";
+import HarvestModel from "../../model/mongoose/schemas/harvest.model";
 
 export class HivesController {
     public async getHives(req: Request, res: Response, next: NextFunction) {
@@ -56,8 +57,6 @@ export class HivesController {
 
     public async createHive(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log(req.body);
-            
             const newHive = req.body as Hive;
             const hive = new HiveModel({
                 name: newHive.name,
@@ -72,14 +71,33 @@ export class HivesController {
         }
     }
 
-    public updateHive(req: Request, res: Response, next: NextFunction) {
-        res.send('Update Hive');
+    public async updateHive(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = req.params.id;
+            const { name, location } = req.body;
+            if (!name || !location) {
+                next(new RequestError('Missing parameters', 400));
+            }
+
+            HiveModel.findByIdAndUpdate(id, { name: name, location: location }).then(() => {
+                res.status(200).json({
+                    message: 'Hive updated',
+                    _links: {
+                        self: `/api/v1/hives/${id}`
+                    }
+                });
+            })
+            .catch(() => {
+                next(new RequestError('Hive not found', 404));
+            });
+        } catch (error) {
+            next(new RequestError('Error updating hive', 500));
+        }
     }
 
     public async deleteHive(req: Request, res: Response, next: NextFunction) {
         try {
             const id = req.params.id;
-            console.log(id);
             
             const hive = await HiveModel.findById(id);
             if (hive) {
@@ -94,11 +112,44 @@ export class HivesController {
         }
     }
 
-    public createHarvestReport(req: Request, res: Response, next: NextFunction) {
-        res.send('Create Report');
+    public async createHarvestReport(req: Request, res: Response, next: NextFunction) {
+        try {
+            const hiveId = req.params.id;
+            const { harvest } = req.body;
+            
+            if (!harvest) {
+                next(new RequestError('Missing parameters', 400));
+            }
+            const hive = await HiveModel.findById(hiveId);
+            if (hive) {
+                const harvestReport = new HarvestModel({
+                    parent_hive: hiveId,
+                    harvest: harvest
+                });
+                await harvestReport.save();
+                res.json({harvest_report: harvestReport, message: 'Harvest report created', _links: {
+                    self: `/api/v1/hives/${hiveId}/harvests/${harvestReport.id}`,
+                    parent_hive: `/api/v1/hives/${hiveId}`
+                }});
+            } else {
+                next(new RequestError('Parent hive not found', 404));
+            }
+        } catch (error) {
+            next(new RequestError('Error creating harvest report', 500));
+        }
     }
 
-    public getHarvestReport(req: Request, res: Response, next: NextFunction) {
-        res.send('Get Report');
+    public async getHarvestReports(req: Request, res: Response, next: NextFunction) {
+        try {
+            const hiveId = req.params.id;
+            const harvest = await HarvestModel.find({ parent_hive: hiveId });
+            if (harvest) {
+                res.status(200).json(harvest);
+            } else {
+                next(new RequestError('No harvest-reports found', 404));
+            }
+        } catch (error) {
+            next(new RequestError('Error getting harvest reports', 500));
+        }
     }
 }

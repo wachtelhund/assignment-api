@@ -127,7 +127,7 @@ router.delete('/:id', (req, res, next) => controller.deleteHive(req, res, next))
  *       201:
  *         description: Harvest report created
  */
-router.post('/:id/harvest-reports', (req, res, next) => controller.createHarvestReport(req, res, next));
+router.post('/:id/harvests', (req, res, next) => controller.createHarvestReport(req, res, next));
 
 /**
  * @swagger
@@ -147,7 +147,7 @@ router.post('/:id/harvest-reports', (req, res, next) => controller.createHarvest
  *       200:
  *         description: A list of harvest reports.
  */
-router.get('/:id/harvest-reports', (req, res, next) => controller.getHarvestReport(req, res, next));
+router.get('/:id/harvests', (req, res, next) => controller.getHarvestReports(req, res, next));
 
 router.use('/:id/status', hivesStatusRouter)
 

@@ -1,4 +1,9 @@
+import { ObjectId } from "mongoose";
+import { Hive } from "./Hive";
+
 export interface HarvestReport {
+    parent_hive: Hive | ObjectId;
     createdAt: Date;
-    amount_harvested_kg: number;
+    updatedAt: Date;
+    harvest: number;
 }
