@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import HiveModel from "../../model/mongoose/schemas/hive.model";
 import { RequestError } from "../../../../utils/requestError";
 import { Hive } from "../../model/types/Hive";
+import HiveStatusModel from "../../model/mongoose/schemas/hiveStatus.model";
 
 export class HivesController {
     public async getHives(req: Request, res: Response, next: NextFunction) {
@@ -61,9 +62,6 @@ export class HivesController {
             const hive = new HiveModel({
                 name: newHive.name,
                 location: newHive.location,
-                current_status: newHive.current_status,
-                history: newHive.history,
-                harvest_reports: newHive.harvest_reports,
             });
             await hive.save();
             res.json({hive: hive, message: 'Hive created', _links: {
@@ -78,8 +76,22 @@ export class HivesController {
         res.send('Update Hive');
     }
 
-    public deleteHive(req: Request, res: Response, next: NextFunction) {
-        res.send('Delete Hive');
+    public async deleteHive(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = req.params.id;
+            console.log(id);
+            
+            const hive = await HiveModel.findById(id);
+            if (hive) {
+                await HiveStatusModel.deleteMany({ parent_hive: hive.id })
+                await HiveModel.findByIdAndDelete(id);
+                res.status(200).json({ message: 'Hive deleted' });
+            } else {
+                next(new RequestError('Hive not found', 404));
+            }
+        } catch (error) {
+            next(new RequestError('Error deleting hive', 500));
+        }
     }
 
     public createHarvestReport(req: Request, res: Response, next: NextFunction) {

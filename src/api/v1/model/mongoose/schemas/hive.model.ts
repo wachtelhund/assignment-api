@@ -10,7 +10,6 @@ const schema = new mongoose.Schema<Hive>(
             longitude: { type: Number, required: true }
         },
         current_status: { type: ObjectId, ref: 'HiveStatus' },
-        history: [{ type: ObjectId, ref: 'HiveStatus' }],
         createdAt: { type: Date },
         updatedAt: { type: Date }
     },

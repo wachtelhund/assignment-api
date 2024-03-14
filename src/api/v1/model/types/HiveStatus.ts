@@ -1,5 +1,8 @@
+import { ObjectId } from "mongoose";
+import { Hive } from "./Hive";
+
 export interface HiveStatus {
-    parent_hive: string;
+    parent_hive: Hive | ObjectId;
     temperature: number;
     humidity: number;
     weight: number;
