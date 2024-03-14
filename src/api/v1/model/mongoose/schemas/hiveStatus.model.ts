@@ -11,7 +11,6 @@ const schema = new mongoose.Schema<HiveStatus>(
             departures: { type: Number, required: true },
             arrivals: { type: Number, required: true }
         },
-        // TODO: FIX THIS SHII
         parent_hive: { type: ObjectId, ref: 'Hive', required: true },
         createdAt: { type: Date },
         updatedAt: { type: Date }

@@ -1,5 +1,6 @@
 import express from 'express';
 import { HiveStatusController } from '../../../controller/hives/HiveStatusController'
+import { verifyJWT } from '../../../../../utils/tokenHandlers';
 
 export const router = express.Router({ mergeParams: true });
 
@@ -35,7 +36,7 @@ router.get('/', (req, res, next) => controller.getHiveStatus(req, res, next));
  *       201:
  *         description: Hive status created
  */
-router.post('/', (req, res, next) => controller.createHiveStatus(req, res, next));
+router.post('/', verifyJWT, (req, res, next) => controller.createHiveStatus(req, res, next));
 
 /**
  * @swagger
