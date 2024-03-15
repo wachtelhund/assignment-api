@@ -49,13 +49,28 @@ export class HiveStatusController {
             const hive = await HiveModel.find({ id: hiveId });
             
             if (hive) {
-                const hiveStatus = new HiveStatusModel({
-                    parent_hive: hiveId,
-                    temperature: req.body.temperature,
-                    humidity: req.body.humidity,
-                    weight: req.body.weight,
-                    hive_flow: req.body.hive_flow
-                });
+
+                const foundHiveStatus = await HiveStatusModel.findOneAndUpdate(
+                    { parent_hive: hiveId },
+                    { 
+                        temperature: req.body.temperature,
+                        humidity: req.body.humidity,
+                        weight: req.body.weight,
+                        hive_flow: req.body.hive_flow
+                    }
+                );
+                
+                if (!foundHiveStatus) {
+                    const hiveStatus = new HiveStatusModel({
+                        parent_hive: hiveId,
+                        temperature: req.body.temperature,
+                        humidity: req.body.humidity,
+                        weight: req.body.weight,
+                        hive_flow: req.body.hive_flow
+                    });
+
+                    await hiveStatus.save();
+                }
 
                 const temperature = new TemperatureModel({
                     temperature: req.body.temperature,
@@ -73,8 +88,7 @@ export class HiveStatusController {
                 });
 
                 const hiveFlow = new HiveFlowModel({
-                    departures: req.body.hive_flow.departures,
-                    arrivals: req.body.hive_flow.arrivals,
+                    hive_flow: req.body.hive_flow,
                     parent_hive: hiveId
                 });
 
@@ -82,15 +96,24 @@ export class HiveStatusController {
                 await humidity.save();
                 await weight.save();
                 await hiveFlow.save();
-                await hiveStatus.save();
-                res.json({hive_status: hiveStatus, message: 'Hive status created', _links: {
-                    self: `/api/v1/hives/${hiveStatus.id}`,
-                }});
 
+                res.status(201).json({
+                    message: 'Hive status created',
+                    _links: {
+                        self: `/api/v1/hives/${hiveId}/status`,
+                        humidity: `/api/v1/hives/${hiveId}/status/humidity`,
+                        weight: `/api/v1/hives/${hiveId}/status/weight`,
+                        temperature: `/api/v1/hives/${hiveId}/status/temperature`,
+                        hive_flow: `/api/v1/hives/${hiveId}/status/hive_flow`,
+                        parent_hive: `/api/v1/hives/${hiveId}`
+                    }
+                });
             } else {
                 next(new RequestError('Parent hive not found', 404));
             }
         } catch (error) {
+            console.log(error);
+            
             next(new RequestError('Error creating hive status', 500));
         }
     }

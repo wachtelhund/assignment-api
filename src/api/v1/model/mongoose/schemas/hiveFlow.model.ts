@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 const schema = new mongoose.Schema(
     {
         parent_hive: { type: mongoose.Schema.Types.ObjectId, ref: 'Hive', required: true },
-        departures: { type: Number, required: true },
-        arrivals: { type: Number, required: true },
+        hive_flow: { type: Number, required: true },
         createdAt: { type: Date },
         updatedAt: { type: Date }
     },

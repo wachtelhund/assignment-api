@@ -7,10 +7,7 @@ const schema = new mongoose.Schema<HiveStatus>(
         temperature: { type: Number, required: true },
         humidity: { type: Number, required: true },
         weight: { type: Number, required: true },
-        hive_flow: {
-            departures: { type: Number, required: true },
-            arrivals: { type: Number, required: true }
-        },
+        hive_flow: { type: Number, required: true },
         parent_hive: { type: ObjectId, ref: 'Hive', required: true },
         createdAt: { type: Date },
         updatedAt: { type: Date }
