@@ -1,24 +1,15 @@
 import e, { Response, Request, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import UserModel from '../api/v1/model/mongoose/schemas/user.model';
+import { RequestError } from './requestError';
 
 export function generateJWT(res: Response, userId: string) {
     const jwtSecret = process.env.JWT_SECRET || 'secret';
     const jwtToken = jwt.sign({ userId }, jwtSecret, { expiresIn: '4h' });
-    res.status(200).json({
-        token: jwtToken,
-        _links: {
-            docs: '/api/v1/docs',
-            logout: '/api/v1/auth/logout',
-            hives: '/api/v1/hives'
-        }
-    });
+    return jwtToken;
 }
 
-export function clearJWT(res: Response) {
-    res.clearCookie('assignment-api-token');
-}
-
-export function verifyJWT(req: Request, res: Response, next: NextFunction) {
+export const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
     const unauthorized = {
         message: 'Unauthorized',
         _links: {
@@ -36,6 +27,14 @@ export function verifyJWT(req: Request, res: Response, next: NextFunction) {
             const decoded = jwt.verify(token, jwtSecret);
 
             if (decoded) {
+                const userId = (decoded as JwtPayload).userId;
+                const user = await UserModel.findById(userId);
+                console.log("USER >> ", user);
+                
+                
+                if (!user || user.lastJWT !== token) {
+                    next(new RequestError('Unauthorized, token has been revoked, please sign in again and use the new token', 401))
+                }
                 next();
             } else {
                 res.status(401).json(unauthorized);

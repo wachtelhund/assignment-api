@@ -6,6 +6,7 @@ const schema = new mongoose.Schema<User>(
     {
         username: { type: String, required: true, unique: true },
         password: { type: String, required: true },
+        lastJWT: { type: String },
         createdAt: { type: Date },
         updatedAt: { type: Date }
     },

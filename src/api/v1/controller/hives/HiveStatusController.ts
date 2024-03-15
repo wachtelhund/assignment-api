@@ -128,44 +128,58 @@ export class HiveStatusController {
     }
 
     private async getFromToDates(req: Request, res: Response, model: mongoose.Model<any, {}>, next: NextFunction) {
+        try {
+            const hiveId = req.params.id;
+            const from = req.query.from as string;
+            const to = req.query.to as string;
         
-        const hiveId = req.params.id;
-        const from = req.query.from as string;
-        const to = req.query.to as string;
-        
-        let fromDate, toDate;
+            let fromDate, toDate;
 
-        if (from) {
-            fromDate = new Date(from);
-        }
-        if (to) {
-            toDate = new Date(to);
-        }
+            if (from) {
+                fromDate = new Date(from);
+            }
+            if (to) {
+                toDate = new Date(to);
+            }
 
-        if (!to) {
-            toDate = new Date();
-        }
-        if (!from) {
-            // last 24 hours
-            fromDate = new Date(toDate!.getTime() - 24 * 60 * 60 * 1000);
-        }
+            if (!to) {
+                toDate = new Date();
+            }
+            if (!from) {
+                // last 24 hours
+                fromDate = new Date(toDate!.getTime() - 24 * 60 * 60 * 1000);
+            }
 
-        if (fromDate && toDate && fromDate > toDate) {
-            next(new RequestError('Invalid date range', 400));
-        }
+            if (fromDate && toDate && fromDate > toDate) {
+                next(new RequestError('Invalid date range', 400));
+            }
 
-        const entries = await model.find({ parent_hive: hiveId, createdAt: { $gte: fromDate, $lte: toDate } });
-
-        if (entries.length > 0) {
-            res.status(200).json({
-                ...entries,
-                _links: {
-                    status: `/api/v1/hives/${hiveId}/status`,
-                    parent_hive: `/api/v1/hives/${hiveId}`
-                }
+            const entries = await model.find({ parent_hive: hiveId, createdAt: { $gte: fromDate, $lte: toDate } }).then(entries => {
+                res.status(200).json({
+                    ...entries,
+                    _links: {
+                        status: `/api/v1/hives/${hiveId}/status`,
+                        parent_hive: `/api/v1/hives/${hiveId}`
+                    }
+                });
+            })
+            .catch(error => {
+                next(new RequestError('Error getting entries', 500));
             });
-        } else {
-            res.status(204).send();
+
+            // if (entries.length > 0) {
+            //     res.status(200).json({
+            //         ...entries,
+            //         _links: {
+            //             status: `/api/v1/hives/${hiveId}/status`,
+            //             parent_hive: `/api/v1/hives/${hiveId}`
+            //         }
+            //     });
+            // } else {
+            //     res.status(204).send();
+            // }
+        } catch (error) {
+            
         }
     }
 }
