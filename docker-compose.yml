@@ -4,7 +4,7 @@ services:
   app:
     image: wachtelhund/assignment-api:latest
     environment:
-      MONGO_URI: mongodb://root:example@localhost:27017
+      MONGO_URI: mongodb://root:example@mongodb:27017
       PORT: 3000
 
     ports:

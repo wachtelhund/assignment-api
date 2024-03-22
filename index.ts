@@ -24,7 +24,7 @@ if (process.env.MONGO_URI !== undefined) {
       
       swaggerDocs(app);
 
-      app.use('/api/v1', v1Router);
+      app.use('api/v1', v1Router);
 
       app.use(errorHandler);
 
