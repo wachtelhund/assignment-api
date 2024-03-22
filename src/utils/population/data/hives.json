@@ -1,0 +1,37 @@
+[
+    {
+        "name": "Hive Mind",
+        "location": {
+            "latitude": 37.7749,
+            "longitude": -122.4194
+        }
+    },
+    {
+        "name": "The Hive",
+        "location": {
+            "latitude": 56.7749,
+            "longitude": -132.4194
+        }
+    },
+    {
+        "name": "Hive",
+        "location": {
+            "latitude": 42.7749,
+            "longitude": 22.4194
+        }
+    },
+    {
+        "name": "Ultimate Hive",
+        "location": {
+            "latitude": 44.7749,
+            "longitude": 44.4194
+        }
+    },
+    {
+        "name": "Mega Hive",
+        "location": {
+            "latitude": 22.7749,
+            "longitude": 27.4194
+        }
+    }
+]

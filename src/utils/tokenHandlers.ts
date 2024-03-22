@@ -29,8 +29,6 @@ export const verifyJWT = async (req: Request, res: Response, next: NextFunction)
             if (decoded) {
                 const userId = (decoded as JwtPayload).userId;
                 const user = await UserModel.findById(userId);
-                console.log("USER >> ", user);
-                
                 
                 if (!user || user.lastJWT !== token) {
                     next(new RequestError('Unauthorized, token has been revoked, please sign in again and use the new token', 401))

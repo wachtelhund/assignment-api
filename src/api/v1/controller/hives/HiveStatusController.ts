@@ -112,8 +112,6 @@ export class HiveStatusController {
                 next(new RequestError('Parent hive not found', 404));
             }
         } catch (error) {
-            console.log(error);
-            
             next(new RequestError('Error creating hive status', 500));
         }
     }
@@ -155,29 +153,13 @@ export class HiveStatusController {
             const hiveId = req.params.id;
             const from = req.query.from as string;
             const to = req.query.to as string;
-        
-            let fromDate, toDate;
+            
+            let toDate = to !== undefined ? new Date(to) : new Date();
+            let fromDate = from !== undefined ? new Date(from) : new Date(toDate!.getTime() - 24 * 60 * 60 * 1000);
 
-            if (from) {
-                fromDate = new Date(from);
-            }
-            if (to) {
-                toDate = new Date(to);
-            }
-
-            if (!to) {
-                toDate = new Date();
-            }
-            if (!from) {
-                // last 24 hours
-                fromDate = new Date(toDate!.getTime() - 24 * 60 * 60 * 1000);
-            }
-
-            if (fromDate && toDate && fromDate > toDate) {
-                next(new RequestError('Invalid date range', 400));
-            }
-
-            const entries = await model.find({ parent_hive: hiveId, createdAt: { $gte: fromDate, $lte: toDate } }).then(entries => {
+            await model.find({ parent_hive: hiveId, createdAt: { $gte: fromDate, $lte: toDate } }).then(entries => {
+                console.log(entries);
+                
                 res.status(200).json({
                     ...entries,
                     _links: {
@@ -189,18 +171,6 @@ export class HiveStatusController {
             .catch(error => {
                 next(new RequestError('Error getting entries', 500));
             });
-
-            // if (entries.length > 0) {
-            //     res.status(200).json({
-            //         ...entries,
-            //         _links: {
-            //             status: `/api/v1/hives/${hiveId}/status`,
-            //             parent_hive: `/api/v1/hives/${hiveId}`
-            //         }
-            //     });
-            // } else {
-            //     res.status(204).send();
-            // }
         } catch (error) {
             
         }
