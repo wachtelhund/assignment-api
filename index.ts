@@ -7,7 +7,6 @@ import { router as v1Router } from './src/api/v1/view/routes/router';
 import mongoose, { Mongoose } from 'mongoose';
 import { errorHandler } from './src/utils/errorHandler';
 import bodyParser from 'body-parser';
-import { DbPopulator } from './src/utils/population/populateDb';
 
 dotenv.config();
 
@@ -24,7 +23,7 @@ if (process.env.MONGO_URI !== undefined) {
       
       swaggerDocs(app);
 
-      app.use('api/v1', v1Router);
+      app.use('/api/v1', v1Router);
 
       app.use(errorHandler);
 
