@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => controller.getHiveStatus(req, res, next));
 
 /**
  * @swagger
- * /api/v1/hives/status:
+ * /api/v1/hives/{id}/status:
  *   post:
  *     tags:
  *      - HiveStatus
