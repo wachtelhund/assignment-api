@@ -22,7 +22,13 @@ export class HivesController {
                 };
             });
             if (mappedHives.length > 0) {
-                res.status(200).json(mappedHives);
+                res.status(200).json(
+                    {
+                        data: {
+                            hives: mappedHives
+                        }
+                    }
+                    );
             } else {
                 res.status(204).send();
             }
@@ -37,11 +43,13 @@ export class HivesController {
             const hive = await HiveModel.findById(id);
             if (hive) {
                 res.status(200).json({
-                    id: hive.id,
-                    name: hive.name,
-                    location: hive.location,
-                    createdAt: hive.createdAt,
-                    updatedAt: hive.updatedAt,
+                    data: {
+                        id: hive.id,
+                        name: hive.name,
+                        location: hive.location,
+                        createdAt: hive.createdAt,
+                        updatedAt: hive.updatedAt,
+                    },
                     _links: {
                         current_status: `/api/v1/hives/${hive.id}/status`
                     }
@@ -103,7 +111,9 @@ export class HivesController {
             if (hive) {
                 await HiveStatusModel.deleteMany({ parent_hive: hive.id })
                 await HiveModel.findByIdAndDelete(id);
-                res.status(200).json({ message: 'Hive deleted' });
+                res.status(200).json({ message: 'Hive deleted', _links: {
+                    hives: '/api/v1/hives'
+                } });
             } else {
                 next(new RequestError('Hive not found', 404));
             }
@@ -143,8 +153,14 @@ export class HivesController {
         try {
             const hiveId = req.params.id;
             const harvest = await HarvestModel.find({ parent_hive: hiveId });
+            const statusCode = harvest && harvest.length > 0 ? 200 : 204;
             if (harvest) {
-                res.status(200).json(harvest);
+                res.status(statusCode).json({
+                    data: harvest,
+                    _links: {
+                        parent_hive: `/api/v1/hives/${hiveId}`
+                    }
+                });
             } else {
                 next(new RequestError('No harvest-reports found', 404));
             }

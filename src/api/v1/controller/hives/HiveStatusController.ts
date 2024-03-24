@@ -15,13 +15,15 @@ export class HiveStatusController {
             const hiveStatus = await HiveStatusModel.findOne({ parent_hive: hiveId }).sort({ createdAt: -1 }).limit(1);
             if (hiveStatus) {
                 res.status(200).json({
-                    id: hiveStatus.id,
-                    temperature: hiveStatus.temperature,
-                    humidity: hiveStatus.humidity,
-                    weight: hiveStatus.weight,
-                    hive_flow: hiveStatus.hive_flow,
-                    createdAt: hiveStatus.createdAt,
-                    updatedAt: hiveStatus.updatedAt,
+                    data: {
+                        id: hiveStatus.id,
+                        temperature: hiveStatus.temperature,
+                        humidity: hiveStatus.humidity,
+                        weight: hiveStatus.weight,
+                        hive_flow: hiveStatus.hive_flow,
+                        createdAt: hiveStatus.createdAt,
+                        updatedAt: hiveStatus.updatedAt,
+                    },
                     _links: {
                         self: `/api/v1/hives/${hiveId}/status`,
                         huidity: `/api/v1/hives/${hiveId}/status/humidity`,
@@ -157,11 +159,17 @@ export class HiveStatusController {
             let toDate = to !== undefined ? new Date(to) : new Date();
             let fromDate = from !== undefined ? new Date(from) : new Date(toDate!.getTime() - 24 * 60 * 60 * 1000);
 
-            await model.find({ parent_hive: hiveId, createdAt: { $gte: fromDate, $lte: toDate } }).then(entries => {
+            console.log(fromDate, toDate);
+
+            await model.find({
+                parent_hive: hiveId,
+                createdAt: { $gte: fromDate, $lte: toDate }
+            }).then(entries => {
                 console.log(entries);
                 
+                res.setHeader('Content-Type', 'application/json');
                 res.status(200).json({
-                    ...entries,
+                    data: entries,
                     _links: {
                         status: `/api/v1/hives/${hiveId}/status`,
                         parent_hive: `/api/v1/hives/${hiveId}`
