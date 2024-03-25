@@ -4,6 +4,10 @@ import { RequestError } from "../../../../utils/requestError";
 import { Hive } from "../../model/types/Hive";
 import HiveStatusModel from "../../model/mongoose/schemas/hiveStatus.model";
 import HarvestModel from "../../model/mongoose/schemas/harvest.model";
+import TemperatureModel from "../../model/mongoose/schemas/temperature.model";
+import HumidityModel from "../../model/mongoose/schemas/humidity.model";
+import HiveFlowModel from "../../model/mongoose/schemas/hiveFlow.model";
+import WeightModel from "../../model/mongoose/schemas/weight.model";
 
 export class HivesController {
     public async getHives(req: Request, res: Response, next: NextFunction) {
@@ -17,7 +21,8 @@ export class HivesController {
                     createdAt: hive.createdAt,
                     updatedAt: hive.updatedAt,
                     _links: {
-                        current_status: `/api/v1/hives/${hive.id}/status`
+                        current_status: `/api/v1/hives/${hive.id}/status`,
+                        harvests: `/api/v1/hives/${hive.id}/harvests`
                     }
                 };
             });
@@ -51,7 +56,8 @@ export class HivesController {
                         updatedAt: hive.updatedAt,
                     },
                     _links: {
-                        current_status: `/api/v1/hives/${hive.id}/status`
+                        current_status: `/api/v1/hives/${hive.id}/status`,
+                        harvests: `/api/v1/hives/${hive.id}/harvests`,
                     }
                 });
             } else {
@@ -110,10 +116,18 @@ export class HivesController {
             const hive = await HiveModel.findById(id);
             if (hive) {
                 await HiveStatusModel.deleteMany({ parent_hive: hive.id })
+                await HarvestModel.deleteMany({ parent_hive: hive.id });
+                await TemperatureModel.deleteMany({ parent_hive: hive.id });
+                await HumidityModel.deleteMany({ parent_hive: hive.id });
+                await HiveFlowModel.deleteMany({ parent_hive: hive.id });
+                await WeightModel.deleteMany({ parent_hive: hive.id });
                 await HiveModel.findByIdAndDelete(id);
-                res.status(200).json({ message: 'Hive deleted', _links: {
-                    hives: '/api/v1/hives'
-                } });
+                res.status(200).json({
+                    message: 'Hive deleted',
+                    _links: {
+                        hives: '/api/v1/hives'
+                    } 
+                });
             } else {
                 next(new RequestError('Hive not found', 404));
             }
@@ -137,10 +151,14 @@ export class HivesController {
                     harvest: harvest
                 });
                 await harvestReport.save();
-                res.json({harvest_report: harvestReport, message: 'Harvest report created', _links: {
-                    self: `/api/v1/hives/${hiveId}/harvests/${harvestReport.id}`,
-                    parent_hive: `/api/v1/hives/${hiveId}`
-                }});
+                res.json({
+                    harvest_report: harvestReport,
+                    message: 'Harvest report created',
+                    _links: {
+                        self: `/api/v1/hives/${hiveId}/harvests/${harvestReport.id}`,
+                        parent_hive: `/api/v1/hives/${hiveId}`
+                    }
+                });
             } else {
                 next(new RequestError('Parent hive not found', 404));
             }

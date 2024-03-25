@@ -8,6 +8,7 @@ import HiveStatusModel from '../../api/v1/model/mongoose/schemas/hiveStatus.mode
 import TemperatureModel from '../../api/v1/model/mongoose/schemas/temperature.model';
 import HumidityModel from '../../api/v1/model/mongoose/schemas/humidity.model';
 import HiveFlowModel from '../../api/v1/model/mongoose/schemas/hiveFlow.model';
+import HarvestModel from '../../api/v1/model/mongoose/schemas/harvest.model';
 
 export class DbPopulator {
     csvWeightPath = './src/utils/population/data/weight_2017.csv';
@@ -37,6 +38,7 @@ export class DbPopulator {
         await TemperatureModel.deleteMany({});
         await HumidityModel.deleteMany({});
         await HiveFlowModel.deleteMany({});
+        await HarvestModel.deleteMany({});
 
         await HiveModel.insertMany(hiveData);
 
@@ -81,6 +83,16 @@ export class DbPopulator {
                 createdAt: humidity.timestamp,
                 parent_hive: hiveId
             });
+
+            const randomHarvest = Math.floor(Math.random() * 100);
+            //Random date during last year
+            const randomDate = new Date(new Date().getTime() - Math.floor(Math.random() * 31536000000));
+
+            await HarvestModel.create({
+                harvest: randomHarvest,
+                createdAt: randomDate,
+                parent_hive: hiveId
+            })
         }
 
         for (const hive of await HiveModel.find({})) {
