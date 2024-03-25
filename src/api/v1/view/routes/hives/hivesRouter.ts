@@ -106,7 +106,7 @@ router.delete('/:id', verifyJWT, (req, res, next) => controller.deleteHive(req, 
 
 /**
  * @swagger
- * /api/v1/hives/{id}/harvest-reports:
+ * /api/v1/hives/{id}/harvests:
  *   post:
  *     tags:
  *      - Hives
@@ -132,7 +132,80 @@ router.post('/:id/harvests', verifyJWT, (req, res, next) => controller.createHar
 
 /**
  * @swagger
- * /api/v1/hives/{id}/harvest-reports:
+ * /api/v1/hives/{id}/harvests/subscriptions:
+ *   post:
+ *     tags:
+ *      - Webhooks
+ *     summary: Subscribe to harvest report notifications.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The id of the hive.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Subscriber'
+ *     responses:
+ *       201:
+ *         description: Subscribed to harvest reports
+ */
+router.post('/:id/harvests/subscriptions', verifyJWT, (req, res, next) => controller.subscribeToHarvestReport(req, res, next));
+
+/**
+ * @swagger
+ * /api/v1/hives/{id}/harvests/subscriptions:
+ *   delete:
+ *     tags:
+ *      - Webhooks
+ *     summary: Unsubscribe from harvest report notifications.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The id of the hive.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Hive'
+ *      
+ *     responses:
+ *       200:
+ *         description: Unsubscribed from harvest reports
+ */
+router.delete('/:id/harvests/subscriptions', verifyJWT, (req, res, next) => controller.unsubscribeToHarvestReports(req, res, next));
+
+/**
+ * @swagger
+ * /api/v1/hives/{id}/harvests/subscriptions:
+ *   get:
+ *     tags:
+ *      - Webhooks
+ *     summary: Returns a list of harvest report subscriptions.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The id of the hive.
+ *     responses:
+ *       200:
+ *         description: A list of harvest report subscriptions.
+ */
+router.get('/:id/harvests/subscriptions', verifyJWT, (req, res, next) => controller.getHarvestReportSubscriptions(req, res, next));
+
+/**
+ * @swagger
+ * /api/v1/hives/{id}/harvests:
  *   get:
  *     tags:
  *      - Hives

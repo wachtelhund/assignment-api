@@ -18,7 +18,6 @@ router.get('/', (req, res, next) =>  {
         }
 
     })
-
 });
 
 router.use('/hives', hivesRouter);

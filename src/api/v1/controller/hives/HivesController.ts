@@ -8,6 +8,8 @@ import TemperatureModel from "../../model/mongoose/schemas/temperature.model";
 import HumidityModel from "../../model/mongoose/schemas/humidity.model";
 import HiveFlowModel from "../../model/mongoose/schemas/hiveFlow.model";
 import WeightModel from "../../model/mongoose/schemas/weight.model";
+import SubscriberModel from "../../model/mongoose/schemas/subscriber.model";
+import { SubscriberLifetime } from "../../model/types/Subscriber";
 
 export class HivesController {
     public async getHives(req: Request, res: Response, next: NextFunction) {
@@ -151,6 +153,11 @@ export class HivesController {
                     harvest: harvest
                 });
                 await harvestReport.save();
+                SubscriberModel.find({ parent_hive: hiveId }).then(subscribers => {
+                    subscribers.forEach(subscriber => {
+                        subscriber.notify(harvestReport)
+                    });
+                });
                 res.json({
                     harvest_report: harvestReport,
                     message: 'Harvest report created',
@@ -184,6 +191,98 @@ export class HivesController {
             }
         } catch (error) {
             next(new RequestError('Error getting harvest reports', 500));
+        }
+    }
+
+    public async subscribeToHarvestReport(req: Request, res: Response, next: NextFunction) {
+        try {
+            const hiveId = req.params.id;
+            const { lifetime, post_url } = req.body;
+            const validLifetime = Object.keys(SubscriberLifetime).includes(lifetime);
+
+            if (!validLifetime || !post_url) {
+                next(new RequestError(`Missing parameters lifetime [${Object.keys(SubscriberLifetime).filter(key => isNaN(Number(key)))}] or post_url`, 400));
+            }
+
+            const hive = await HiveModel.findById(hiveId);
+            if (hive) {
+                const hasSubscriber = await SubscriberModel.findOne({ parent_hive: hiveId, post_url: post_url });
+                if (hasSubscriber) {
+                    next(new RequestError('Subscriber already exists on the same hive with this post_url', 400));
+                } else {
+                    await SubscriberModel.create({
+                        parent_hive: hiveId,
+                        lifetime: SubscriberLifetime[lifetime],
+                        post_url: post_url
+                    });
+                    res.status(201).json({
+                        message: 'Subscribed to harvest report',
+                        _links: {
+                            self: `/api/v1/hives/${hiveId}/harvests/subscriptions`,
+                            parent_hive: `/api/v1/hives/${hiveId}`
+                        }
+                    });
+                }
+            } else {
+                next(new RequestError('Parent hive not found', 404));
+            }
+
+        } catch (error) {
+            next(new RequestError('Error subscribing to harvest report', 500));
+        }
+    }
+
+    public async unsubscribeToHarvestReports(req: Request, res: Response, next: NextFunction) {
+        try {
+            const hiveId = req.params.id;
+            const { post_url } = req.body;
+
+            if (!post_url) {
+                next(new RequestError('Missing parameters post_url', 400));
+            }
+
+            const hive = await HiveModel.findById(hiveId);
+            if (hive) {
+                await SubscriberModel.deleteMany({ parent_hive: hiveId, post_url: post_url });
+                res.status(200).json({
+                    message: 'Unsubscribed from harvest report',
+                    _links: {
+                        self: `/api/v1/hives/${hiveId}/harvests/subscriptions`,
+                        parent_hive: `/api/v1/hives/${hiveId}`
+                    }
+                });
+            } else {
+                next(new RequestError('Parent hive not found', 404));
+            }
+
+        } catch (error) {
+            next(new RequestError('Error unsubscribing from harvest report', 500));
+        }
+    }
+
+    public async getHarvestReportSubscriptions(req: Request, res: Response, next: NextFunction) {
+        try {
+            const hiveId = req.params.id;
+            const subscriptions = await SubscriberModel.find({ parent_hive: hiveId });
+            const statusCode = subscriptions && subscriptions.length > 0 ? 200 : 204;
+            if (subscriptions) {
+                res.status(statusCode).json({
+                    data: subscriptions.map(subscription => {
+                        return {
+                            post_url: subscription.post_url,
+                            createdAt: subscription.createdAt,
+                            expireAt: subscription.expireAt,
+                        };
+                    }),
+                    _links: {
+                        parent_hive: `/api/v1/hives/${hiveId}`
+                    }
+                });
+            } else {
+                next(new RequestError('No subscriptions found', 404));
+            }
+        } catch (error) {
+            next(new RequestError('Error getting subscriptions', 500));
         }
     }
 }
