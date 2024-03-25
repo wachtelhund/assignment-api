@@ -79,7 +79,7 @@ export class HivesController {
                 location: newHive.location,
             });
             await hive.save();
-            res.json({hive: hive, message: 'Hive created', _links: {
+            res.status(201).json({hive: hive, message: 'Hive created', _links: {
                 self: `/api/v1/hives/${hive.id}`,
             }});
         } catch (error) {
@@ -158,7 +158,7 @@ export class HivesController {
                         subscriber.notify(harvestReport)
                     });
                 });
-                res.json({
+                res.status(201).json({
                     harvest_report: harvestReport,
                     message: 'Harvest report created',
                     _links: {

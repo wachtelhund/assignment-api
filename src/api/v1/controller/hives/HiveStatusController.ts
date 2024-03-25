@@ -165,10 +165,9 @@ export class HiveStatusController {
                 parent_hive: hiveId,
                 createdAt: { $gte: fromDate, $lte: toDate }
             }).then(entries => {
-                console.log(entries);
-                
                 res.setHeader('Content-Type', 'application/json');
-                res.status(200).json({
+                const statusCode = entries.length > 0 ? 200 : 204;
+                res.status(statusCode).json({
                     data: entries,
                     _links: {
                         status: `/api/v1/hives/${hiveId}/status`,
