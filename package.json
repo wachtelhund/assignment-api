@@ -7,6 +7,7 @@
     "docker:publish": "sudo docker build -t docker.io/wachtelhund/assignment-api . && sudo docker push docker.io/wachtelhund/assignment-api",
     "docker:run": "docker-compose pull && docker-compose up -d",
     "dev": "bun run ./index.ts --watch",
+    "prod": "bun run ./index.ts NODE_ENV=production",
     "deploy": "bun docker:publish && git push github",
     "populate": "bun run ./src/utils/population/index.ts"
   },
