@@ -13,8 +13,16 @@ export const verifyJWT = async (req: Request, res: Response, next: NextFunction)
     const unauthorized = {
         message: 'Unauthorized',
         _links: {
-            login: '/api/v1/auth/login',
-            register: '/api/v1/auth/register'
+            login: {
+                href: '/api/v1/auth/login',
+                method: 'POST',
+                title: 'Login',
+            },
+            register: {
+                href: '/api/v1/auth/register',
+                method: 'POST',
+                title: 'Register',
+            }
         }
     }
     try {

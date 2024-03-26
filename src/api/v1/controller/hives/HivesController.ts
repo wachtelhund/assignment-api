@@ -23,8 +23,26 @@ export class HivesController {
                     createdAt: hive.createdAt,
                     updatedAt: hive.updatedAt,
                     _links: {
-                        current_status: `/api/v1/hives/${hive.id}/status`,
-                        harvests: `/api/v1/hives/${hive.id}/harvests`
+                        current_status: {
+                            href: `/api/v1/hives/${hive.id}/status`,
+                            method: 'GET',
+                            title: 'Current status'
+                        },
+                        harvests: {
+                            href: `/api/v1/hives/${hive.id}/harvests`,
+                            method: 'GET',
+                            title: 'Harvests'
+                        },
+                        self: {
+                            href: `/api/v1/hives/${hive.id}`,
+                            method: 'GET',
+                            title: 'Hive'
+                        },
+                        create: {
+                            href: `/api/v1/hives`,
+                            method: 'POST',
+                            title: 'Create hive'
+                        },
                     }
                 };
             });
@@ -35,8 +53,16 @@ export class HivesController {
                             hives: mappedHives
                         },
                         _links: {
-                            self: '/api/v1/hives',
-                            home: '/api/v1'
+                            self: {
+                                href: '/api/v1/hives',
+                                method: 'GET',
+                                title: 'Hives'
+                            },
+                            home: {
+                                href: '/api/v1',
+                                method: 'GET',
+                                title: 'Home'
+                            }
                         }
                     }
                     );
@@ -62,10 +88,41 @@ export class HivesController {
                         updatedAt: hive.updatedAt,
                     },
                     _links: {
-                        current_status: `/api/v1/hives/${hive.id}/status`,
-                        harvests: `/api/v1/hives/${hive.id}/harvests`,
-                        hives: '/api/v1/hives',
-                        home: '/api/v1'
+                        update: {
+                            href: `/api/v1/hives/${hive.id}`,
+                            method: 'PUT',
+                            title: 'Update hive'
+                        },
+                        delete: {
+                            href: `/api/v1/hives/${hive.id}`,
+                            method: 'DELETE',
+                            title: 'Delete hive'
+                        },
+                        current_status: {
+                            href: `/api/v1/hives/${hive.id}/status`,
+                            method: 'GET',
+                            title: 'Current status'
+                        },
+                        harvests: {
+                            href: `/api/v1/hives/${hive.id}/harvests`,
+                            method: 'GET',
+                            title: 'Harvests'
+                        },
+                        self: {
+                            href: `/api/v1/hives/${hive.id}`,
+                            method: 'GET',
+                            title: 'Hive'
+                        },
+                        hives: {
+                            href: '/api/v1/hives',
+                            method: 'GET',
+                            title: 'Hives'
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home'
+                        }
                     }
                 });
             } else {
@@ -86,9 +143,21 @@ export class HivesController {
             });
             await hive.save();
             res.status(201).json({hive: hive, message: 'Hive created', _links: {
-                self: `/api/v1/hives/${hive.id}`,
-                hives: '/api/v1/hives',
-                home: '/api/v1'
+                self: {
+                    href: `/api/v1/hives/${hive.id}`,
+                    method: 'GET',
+                    title: 'Hive'
+                },
+                hives: {
+                    href: '/api/v1/hives',
+                    method: 'GET',
+                    title: 'Hives'
+                },
+                home: {
+                    href: '/api/v1',
+                    method: 'GET',
+                    title: 'Home'
+                },
             }});
         } catch (error) {
            next(new RequestError('Error creating hive', 500)); 
@@ -107,9 +176,21 @@ export class HivesController {
                 res.status(200).json({
                     message: 'Hive updated',
                     _links: {
-                        self: `/api/v1/hives/${id}`,
-                        hives: '/api/v1/hives',
-                        home: '/api/v1'
+                        self: {
+                            href: `/api/v1/hives/${id}`,
+                            method: 'GET',
+                            title: 'Hive'
+                        },
+                        hives: {
+                            href: '/api/v1/hives',
+                            method: 'GET',
+                            title: 'Hives'
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home'
+                        },
                     }
                 });
             })
@@ -137,8 +218,16 @@ export class HivesController {
                 res.status(200).json({
                     message: 'Hive deleted',
                     _links: {
-                        hives: '/api/v1/hives',
-                        home: '/api/v1'
+                        hives: {
+                            href: '/api/v1/hives',
+                            method: 'GET',
+                            title: 'Hives'
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home'
+                        }
                     } 
                 });
             } else {
@@ -173,10 +262,26 @@ export class HivesController {
                     harvest_report: harvestReport,
                     message: 'Harvest report created',
                     _links: {
-                        self: `/api/v1/hives/${hiveId}/harvests/${harvestReport.id}`,
-                        parent_hive: `/api/v1/hives/${hiveId}`,
-                        hives: '/api/v1/hives',
-                        home: '/api/v1'
+                        self: {
+                            href: `/api/v1/hives/${hiveId}/harvests/${harvestReport.id}`,
+                            method: 'GET',
+                            title: 'Harvest report'
+                        },
+                        parent_hive: {
+                            href: `/api/v1/hives/${hiveId}`,
+                            method: 'GET',
+                            title: 'Parent hive'
+                        },
+                        hives: {
+                            href: '/api/v1/hives',
+                            method: 'GET',
+                            title: 'Hives'
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home'
+                        }
                     }
                 });
             } else {
@@ -196,9 +301,31 @@ export class HivesController {
                 res.status(statusCode).json({
                     data: harvest,
                     _links: {
-                        parent_hive: `/api/v1/hives/${hiveId}`,
-                        hives: '/api/v1/hives',
-                        home: '/api/v1'
+                        create_harvest_report: {
+                            href: `/api/v1/hives/${hiveId}/harvests`,
+                            method: 'POST',
+                            title: 'Create harvest report'
+                        },
+                        subscriptions: {
+                            href: `/api/v1/hives/${hiveId}/harvests/subscriptions`,
+                            method: 'GET',
+                            title: 'Subscriptions'
+                        },
+                        parent_hive: {
+                            href: `/api/v1/hives/${hiveId}`,
+                            method: 'GET',
+                            title: 'Parent hive'
+                        },
+                        hives: {
+                            href: '/api/v1/hives',
+                            method: 'GET',
+                            title: 'Hives'
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home'
+                        }
                     }
                 });
             } else {
@@ -233,10 +360,26 @@ export class HivesController {
                     res.status(201).json({
                         message: 'Subscribed to harvest report',
                         _links: {
-                            subscriptions: `/api/v1/hives/${hiveId}/harvests/subscriptions`,
-                            parent_hive: `/api/v1/hives/${hiveId}`,
-                            hives: '/api/v1/hives',
-                            home: '/api/v1'
+                            subscriptions: {
+                                href: `/api/v1/hives/${hiveId}/harvests/subscriptions`,
+                                method: 'GET',
+                                title: 'Subscriptions'
+                            },
+                            parent_hive: {
+                                href: `/api/v1/hives/${hiveId}`,
+                                method: 'GET',
+                                title: 'Parent hive'
+                            },
+                            hives: {
+                                href: '/api/v1/hives',
+                                method: 'GET',
+                                title: 'Hives'
+                            },
+                            home: {
+                                href: '/api/v1',
+                                method: 'GET',
+                                title: 'Home'
+                            }
                         }
                     });
                 }
@@ -264,10 +407,26 @@ export class HivesController {
                 res.status(200).json({
                     message: 'Unsubscribed from harvest report',
                     _links: {
-                        self: `/api/v1/hives/${hiveId}/harvests/subscriptions`,
-                        parent_hive: `/api/v1/hives/${hiveId}`,
-                        hives: '/api/v1/hives',
-                        home: '/api/v1'
+                        subscriptions: {
+                            href: `/api/v1/hives/${hiveId}/harvests/subscriptions`,
+                            method: 'GET',
+                            title: 'Subscriptions'
+                        },
+                        parent_hive: {
+                            href: `/api/v1/hives/${hiveId}`,
+                            method: 'GET',
+                            title: 'Parent hive'
+                        },
+                        hives: {
+                            href: '/api/v1/hives',
+                            method: 'GET',
+                            title: 'Hives'
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home'
+                        }
                     }
                 });
             } else {
@@ -294,9 +453,31 @@ export class HivesController {
                         };
                     }),
                     _links: {
-                        parent_hive: `/api/v1/hives/${hiveId}`,
-                        hives: '/api/v1/hives',
-                        home: '/api/v1'
+                        subscribe: {
+                            href: `/api/v1/hives/${hiveId}/harvests/subscriptions`,
+                            method: 'POST',
+                            title: 'Subscribe'
+                        },
+                        unsubscribe: {
+                            href: `/api/v1/hives/${hiveId}/harvests/subscriptions`,
+                            method: 'DELETE',
+                            title: 'Unsubscribe'
+                        },
+                        parent_hive: {
+                            href: `/api/v1/hives/${hiveId}`,
+                            method: 'GET',
+                            title: 'Parent hive'
+                        },
+                        hives: {
+                            href: '/api/v1/hives',
+                            method: 'GET',
+                            title: 'Hives'
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home'
+                        }
                     }
                 });
             } else {

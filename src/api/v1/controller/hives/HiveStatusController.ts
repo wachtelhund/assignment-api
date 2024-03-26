@@ -25,12 +25,41 @@ export class HiveStatusController {
                         updatedAt: hiveStatus.updatedAt,
                     },
                     _links: {
-                        self: `/api/v1/hives/${hiveId}/status`,
-                        huidity: `/api/v1/hives/${hiveId}/status/humidity`,
-                        weight: `/api/v1/hives/${hiveId}/status/weight`,
-                        temperature: `/api/v1/hives/${hiveId}/status/temperature`,
-                        hive_flow: `/api/v1/hives/${hiveId}/status/hive_flow`,
-                        parent_hive: `/api/v1/hives/${hiveId}`
+                        self: {
+                            href: `/api/v1/hives/${hiveId}/status`,
+                            method: 'GET',
+                            title: 'Get hive status'
+                        },
+                        create_status: {
+                            href: `/api/v1/hives/${hiveId}/status`,
+                            method: 'POST',
+                            title: 'Create hive status'
+                        },
+                        humidity: {
+                            href: `/api/v1/hives/${hiveId}/status/humidity`,
+                            method: 'GET',
+                            title: 'Get hive humidity'
+                        },
+                        weight: {
+                            href: `/api/v1/hives/${hiveId}/status/weight`,
+                            method: 'GET',
+                            title: 'Get hive weight'
+                        },
+                        temperature: {
+                            href: `/api/v1/hives/${hiveId}/status/temperature`,
+                            method: 'GET',
+                            title: 'Get hive temperature'
+                        },
+                        hive_flow: {
+                            href: `/api/v1/hives/${hiveId}/status/hive_flow`,
+                            method: 'GET',
+                            title: 'Get hive arrival and departure flow'
+                        },
+                        parent_hive: {
+                            href: `/api/v1/hives/${hiveId}`,
+                            method: 'GET',
+                            title: 'Get hive'
+                        },
                     }
                 });
             } else {
@@ -102,14 +131,26 @@ export class HiveStatusController {
                 res.status(201).json({
                     message: 'Hive status created',
                     _links: {
-                        self: `/api/v1/hives/${hiveId}/status`,
-                        humidity: `/api/v1/hives/${hiveId}/status/humidity`,
-                        weight: `/api/v1/hives/${hiveId}/status/weight`,
-                        temperature: `/api/v1/hives/${hiveId}/status/temperature`,
-                        hive_flow: `/api/v1/hives/${hiveId}/status/hive_flow`,
-                        parent_hive: `/api/v1/hives/${hiveId}`,
-                        hives: '/api/v1/hives',
-                        home: '/api/v1'
+                        self: {
+                            href: `/api/v1/hives/${hiveId}/status`,
+                            method: 'GET',
+                            title: 'Get hive status'
+                        },
+                        parent_hive: {
+                            href: `/api/v1/hives/${hiveId}`,
+                            method: 'GET',
+                            title: 'Get hive'
+                        },
+                        hives: {
+                            href: '/api/v1/hives',
+                            method: 'GET',
+                            title: 'Get hives'
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home'
+                        }
                     }
                 });
             } else {
@@ -172,10 +213,26 @@ export class HiveStatusController {
                 res.status(statusCode).json({
                     data: entries,
                     _links: {
-                        status: `/api/v1/hives/${hiveId}/status`,
-                        parent_hive: `/api/v1/hives/${hiveId}`,
-                        hives: '/api/v1/hives',
-                        home: '/api/v1'
+                        status: {
+                            href: `/api/v1/hives/${hiveId}/status`,
+                            method: 'GET',
+                            title: 'Get hive status'
+                        },
+                        parent_hive: {
+                            href: `/api/v1/hives/${hiveId}`,
+                            method: 'GET',
+                            title: 'Get hive'
+                        },
+                        hives: {
+                            href: '/api/v1/hives',
+                            method: 'GET',
+                            title: 'Get hives'
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home'
+                        }
                     }
                 });
             })

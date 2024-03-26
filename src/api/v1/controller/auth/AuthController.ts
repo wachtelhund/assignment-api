@@ -29,9 +29,21 @@ export class AuthController {
                 res.status(201).json({
                     message: 'User created',
                     _links: {
-                        login: '/api/v1/auth/login',
-                        logout: '/api/v1/auth/logout',
-                        home: '/api/v1'
+                        login: {
+                            href: '/api/v1/auth/login',
+                            method: 'POST',
+                            title: 'Login',
+                        },
+                        logout: {
+                            href: '/api/v1/auth/logout',
+                            method: 'POST',
+                            title: 'Logout',
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home',
+                        }
                     }
                 });
             }
@@ -56,8 +68,16 @@ export class AuthController {
                     message: 'Logged in successfully',
                     token: token,
                     _links: {
-                        logout: '/api/v1/auth/logout',
-                        home: '/api/v1'
+                        logout: {
+                            href: '/api/v1/auth/logout',
+                            method: 'POST',
+                            title: 'Logout',
+                        },
+                        home: {
+                            href: '/api/v1',
+                            method: 'GET',
+                            title: 'Home',
+                        }
                     }
                 });
             } else {
@@ -78,9 +98,21 @@ export class AuthController {
                     res.status(200).json({
                         message: 'Logged out successfully',
                         _links: {
-                            login: '/api/v1/auth/login',
-                            register: '/api/v1/auth/register',
-                            home: '/api/v1'
+                            login: {
+                                href: '/api/v1/auth/login',
+                                method: 'POST',
+                                title: 'Login',
+                            },
+                            register: {
+                                href: '/api/v1/auth/register',
+                                method: 'POST',
+                                title: 'Register',
+                            },
+                            home: {
+                                href: '/api/v1',
+                                method: 'GET',
+                                title: 'Home',
+                            }
                         }
                     });
                 } else {

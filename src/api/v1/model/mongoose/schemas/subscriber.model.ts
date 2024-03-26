@@ -37,8 +37,16 @@ schema.methods.notify = async function (data: HarvestReport) {
             updatedAt: data.updatedAt,
         },
         _links: {
-            harvests: `/api/v1/hives/${this.parent_hive}/harvests`,
-            parent_hive: `/api/v1/hives/${this.parent_hive}`
+            harvests: {
+                href: `/api/v1/hives/${this.parent_hive}/harvests`,
+                method: 'GET',
+                title: 'Harvests',
+            },
+            parent_hive: {
+                href: `/api/v1/hives/${this.parent_hive}`,
+                method: 'GET',
+                title: 'Hive',
+            }
         }
     }
     await fetch(this.post_url, {
