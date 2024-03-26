@@ -68,6 +68,8 @@ router.get('/:id', (req, res, next) => controller.getHive(req, res, next));
  *     responses:
  *       201:
  *         description: Hive created
+ *       401:
+ *         description: Unauthorized
  */
 router.post('/', verifyJWT, (req, res, next) => controller.createHive(req, res, next));
 
@@ -107,6 +109,8 @@ router.post('/', verifyJWT, (req, res, next) => controller.createHive(req, res, 
  *     responses:
  *       200:
  *         description: Hive updated
+ *       401:
+ *         description: Unauthorized
  */
 router.put('/:id', verifyJWT, (req, res, next) => controller.updateHive(req, res, next));
 
@@ -127,6 +131,8 @@ router.put('/:id', verifyJWT, (req, res, next) => controller.updateHive(req, res
  *     responses:
  *       200:
  *         description: Hive deleted
+ *       401:
+ *         description: Unauthorized
  */
 router.delete('/:id', verifyJWT, (req, res, next) => controller.deleteHive(req, res, next));
 
@@ -158,6 +164,8 @@ router.delete('/:id', verifyJWT, (req, res, next) => controller.deleteHive(req, 
  *     responses:
  *       201:
  *         description: Harvest report created
+ *       401:
+ *         description: Unauthorized
  */
 router.post('/:id/harvests', verifyJWT, (req, res, next) => controller.createHarvestReport(req, res, next));
 
@@ -193,6 +201,8 @@ router.post('/:id/harvests', verifyJWT, (req, res, next) => controller.createHar
  *     responses:
  *       201:
  *         description: Subscribed to harvest reports
+ *       401:
+ *         description: Unauthorized
  */
 router.post('/:id/harvests/subscriptions', verifyJWT, (req, res, next) => controller.subscribeToHarvestReport(req, res, next));
 
@@ -220,6 +230,8 @@ router.post('/:id/harvests/subscriptions', verifyJWT, (req, res, next) => contro
  *     responses:
  *       200:
  *         description: Unsubscribed from harvest reports
+ *       401:
+ *         description: Unauthorized
  */
 router.delete('/:id/harvests/subscriptions', verifyJWT, (req, res, next) => controller.unsubscribeToHarvestReports(req, res, next));
 
@@ -241,7 +253,7 @@ router.delete('/:id/harvests/subscriptions', verifyJWT, (req, res, next) => cont
  *       200:
  *         description: A list of harvest report subscriptions.
  */
-router.get('/:id/harvests/subscriptions', verifyJWT, (req, res, next) => controller.getHarvestReportSubscriptions(req, res, next));
+router.get('/:id/harvests/subscriptions', (req, res, next) => controller.getHarvestReportSubscriptions(req, res, next));
 
 /**
  * @swagger

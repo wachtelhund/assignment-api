@@ -8,11 +8,18 @@ const controller = new HiveStatusController();
 
 /**
  * @swagger
- * /api/v1/hives/status:
+ * /api/v1/hives/{id}/status:
  *   get:
  *     tags:
  *      - HiveStatus
  *     summary: Returns the status of a hive.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The id of the hive.
  *     responses:
  *       200:
  *         description: The status of a hive.
@@ -56,16 +63,25 @@ router.get('/', (req, res, next) => controller.getHiveStatus(req, res, next));
  *     responses:
  *       201:
  *         description: Hive status created
+ *       401:
+ *         description: Unauthorized
  */
 router.post('/', verifyJWT, (req, res, next) => controller.createHiveStatus(req, res, next));
 
 /**
  * @swagger
- * /api/v1/hives/status/humidity:
+ * /api/v1/hives/{id}/status/humidity:
  *   get:
  *     tags:
  *      - HiveStatus
  *     summary: Returns the humidity of a hive.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The id of the hive.
  *     responses:
  *       200:
  *         description: The humidity of a hive.
@@ -74,11 +90,18 @@ router.get('/humidity', (req, res, next) => controller.getHiveHumidity(req, res,
 
 /**
  * @swagger
- * /api/v1/hives/status/weight:
+ * /api/v1/hives/{id}/status/weight:
  *   get:
  *     tags:
  *      - HiveStatus
  *     summary: Returns the weight of a hive.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The id of the hive.
  *     responses:
  *       200:
  *         description: The weight of a hive.
@@ -87,11 +110,18 @@ router.get('/weight', (req, res, next) => controller.getHiveWeight(req, res, nex
 
 /**
  * @swagger
- * /api/v1/hives/status/temperature:
+ * /api/v1/hives/{id}/status/temperature:
  *   get:
  *     tags:
  *      - HiveStatus
  *     summary: Returns the temperature of a hive.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The id of the hive.
  *     responses:
  *       200:
  *         description: The temperature of a hive.
@@ -100,11 +130,18 @@ router.get('/temperature', (req, res, next) => controller.getHiveTemperature(req
 
 /**
  * @swagger
- * /api/v1/hives/status/hive-flow:
+ * /api/v1/hives/{id}/status/hive-flow:
  *   get:
  *     tags:
  *      - HiveStatus
  *     summary: Returns the arrival and departure flow of a hive.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The id of the hive.
  *     responses:
  *       200:
  *         description: The arrival and departure flow of a hive.

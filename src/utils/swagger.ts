@@ -5,7 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 
 const swaggerOptions: swaggerJsdoc.Options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: '3.0.1',
     info: {
       title: 'Hive API V1',
       description: 'Hive API Information',
@@ -17,13 +17,17 @@ const swaggerOptions: swaggerJsdoc.Options = {
     components: {
         securitySchemes: {
             bearerAuth: {
-                type: 'apiKey',
-                name: 'x-auth-token',
+                type: 'http',
                 scheme: 'bearer',
-                in: 'header',
+                bearerFormat: 'JWT'
             },
         }
     },
+    security: [
+      {
+        bearerAuth: []
+      }
+    ]
   },
   apis: [path.join(__dirname, '../api/v1/view/routes/**/*.ts')]
 }
