@@ -26,12 +26,33 @@ router.get('/', (req, res, next) => controller.getHiveStatus(req, res, next));
  *     tags:
  *      - HiveStatus
  *     summary: Create a new hive status.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The id of the hive.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/HiveStatus'
+ *             type: object
+ *             properties:
+ *               temperature:
+ *                 type: number
+ *               humidity:
+ *                 type: number
+ *               weight:
+ *                 type: number
+ *               hive_flow:
+ *                 type: number
+ *             required:
+ *               - temperature
+ *               - humidity
+ *               - weight
+ *               - hive_flow
  *     responses:
  *       201:
  *         description: Hive status created

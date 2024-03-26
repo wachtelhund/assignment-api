@@ -17,7 +17,15 @@ const controller = new AuthController();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Login'
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - username
+ *               - password
  *     responses:
  *       200:
  *         description: Logged in.
@@ -36,7 +44,15 @@ router.post('/login', (req, res, next) => controller.login(req, res, next));
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Register'
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - username
+ *               - password
  *     responses:
  *       201:
  *         description: Registered.
@@ -49,7 +65,7 @@ router.post('/register', (req, res, next) => controller.register(req, res, next)
  *   post:
  *     tags:
  *      - Auth
- *     summary: Log out.
+ *     summary: Log out, requires valid token.
  *     responses:
  *       200:
  *         description: Logged out.

@@ -51,7 +51,20 @@ router.get('/:id', (req, res, next) => controller.getHive(req, res, next));
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Hive'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               location:
+ *                 type: object
+ *                 properties:
+ *                   lat:
+ *                     type: number
+ *                   lng:
+ *                     type: number
+ *             required:
+ *               - name
+ *               - location
  *     responses:
  *       201:
  *         description: Hive created
@@ -77,7 +90,20 @@ router.post('/', verifyJWT, (req, res, next) => controller.createHive(req, res, 
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Hive'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               location:
+ *                 type: object
+ *                 properties:
+ *                   lat:
+ *                     type: number
+ *                   lng:
+ *                     type: number
+ *             required:
+ *               - name
+ *               - location
  *     responses:
  *       200:
  *         description: Hive updated
@@ -123,7 +149,12 @@ router.delete('/:id', verifyJWT, (req, res, next) => controller.deleteHive(req, 
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/HarvestReport'
+ *             type: object
+ *             properties:
+ *               harvest:
+ *                 type: number
+ *             required:
+ *               - harvest
  *     responses:
  *       201:
  *         description: Harvest report created
@@ -149,7 +180,16 @@ router.post('/:id/harvests', verifyJWT, (req, res, next) => controller.createHar
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Subscriber'
+ *             type: object
+ *             properties:
+ *               post_url:
+ *                 type: string
+ *               lifetime:
+ *                 type: string
+ *                 enum: ['ONE_HOUR', 'ONE_DAY', 'ONE_WEEK', 'ONE_MONTH']
+ *             required:
+ *               - post_url
+ *               - lifetime
  *     responses:
  *       201:
  *         description: Subscribed to harvest reports
