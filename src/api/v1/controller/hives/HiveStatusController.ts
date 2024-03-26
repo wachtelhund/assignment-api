@@ -107,7 +107,9 @@ export class HiveStatusController {
                         weight: `/api/v1/hives/${hiveId}/status/weight`,
                         temperature: `/api/v1/hives/${hiveId}/status/temperature`,
                         hive_flow: `/api/v1/hives/${hiveId}/status/hive_flow`,
-                        parent_hive: `/api/v1/hives/${hiveId}`
+                        parent_hive: `/api/v1/hives/${hiveId}`,
+                        hives: '/api/v1/hives',
+                        home: '/api/v1'
                     }
                 });
             } else {
@@ -171,7 +173,9 @@ export class HiveStatusController {
                     data: entries,
                     _links: {
                         status: `/api/v1/hives/${hiveId}/status`,
-                        parent_hive: `/api/v1/hives/${hiveId}`
+                        parent_hive: `/api/v1/hives/${hiveId}`,
+                        hives: '/api/v1/hives',
+                        home: '/api/v1'
                     }
                 });
             })

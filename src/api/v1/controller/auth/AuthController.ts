@@ -29,9 +29,9 @@ export class AuthController {
                 res.status(201).json({
                     message: 'User created',
                     _links: {
-                        docs: '/api/v1/docs',
                         login: '/api/v1/auth/login',
-                        logout: '/api/v1/auth/logout'
+                        logout: '/api/v1/auth/logout',
+                        home: '/api/v1'
                     }
                 });
             }
@@ -56,8 +56,8 @@ export class AuthController {
                     message: 'Logged in successfully',
                     token: token,
                     _links: {
-                        docs: '/api/v1/docs',
-                        logout: '/api/v1/auth/logout'
+                        logout: '/api/v1/auth/logout',
+                        home: '/api/v1'
                     }
                 });
             } else {
@@ -78,8 +78,9 @@ export class AuthController {
                     res.status(200).json({
                         message: 'Logged out successfully',
                         _links: {
-                            docs: '/api/v1/docs',
-                            login: '/api/v1/auth/login'
+                            login: '/api/v1/auth/login',
+                            register: '/api/v1/auth/register',
+                            home: '/api/v1'
                         }
                     });
                 } else {
