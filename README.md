@@ -22,6 +22,10 @@ Testing is done using [Postman](https://www.postman.com/). Simply drag and drop 
 # Using the api
 The api is located under **/api/v1**, from there, you can access the other endpoints by browsing the api, or by looking at the docs under **/api/v1/docs** which are currently only served as html(swagger), however a json option will be developed.
 
+### Populated data
+
+The populated data about humidity, weight, hive-flow and temperature is all from 2017. Please consider this when using the api to query these. When querying, use to and from as paramaters, if no paramaters are submitted the last 24 hours of data will be sent (There is no data for these in the last 24 hours).
+
 ### Production
 
 The production api can be found on [Render](https://assignment-api-latest.onrender.com/api/v1).

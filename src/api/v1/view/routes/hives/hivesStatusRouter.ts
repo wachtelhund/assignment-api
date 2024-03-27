@@ -82,6 +82,18 @@ router.post('/', verifyJWT, (req, res, next) => controller.createHiveStatus(req,
  *         schema:
  *           type: string
  *         description: The id of the hive.
+ *       - in: query
+ *         name: from
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *       - in: query
+ *         name: to
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date-time
  *     responses:
  *       200:
  *         description: The humidity of a hive.
@@ -102,6 +114,18 @@ router.get('/humidity', (req, res, next) => controller.getHiveHumidity(req, res,
  *         schema:
  *           type: string
  *         description: The id of the hive.
+ *       - in: query
+ *         name: from
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *       - in: query
+ *         name: to
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date-time
  *     responses:
  *       200:
  *         description: The weight of a hive.
@@ -122,6 +146,18 @@ router.get('/weight', (req, res, next) => controller.getHiveWeight(req, res, nex
  *         schema:
  *           type: string
  *         description: The id of the hive.
+ *       - in: query
+ *         name: from
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *       - in: query
+ *         name: to
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date-time
  *     responses:
  *       200:
  *         description: The temperature of a hive.
@@ -142,6 +178,18 @@ router.get('/temperature', (req, res, next) => controller.getHiveTemperature(req
  *         schema:
  *           type: string
  *         description: The id of the hive.
+ *       - in: query
+ *         name: from
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *       - in: query
+ *         name: to
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date-time
  *     responses:
  *       200:
  *         description: The arrival and departure flow of a hive.
